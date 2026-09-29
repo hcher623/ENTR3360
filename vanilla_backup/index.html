@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Myrimaven — An interactive platform discovering career paths that genuinely fit who you are. Differentiated matching, honest trade-offs, and no test pressure.">
+  <title>Myrimaven — Career Discovery Platform</title>
+  
+  <!-- Modern Typography (Matching Figma Prototype) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <nav class="main-nav" id="main-nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#/" id="nav-logo" aria-label="Myrimaven Home">
+        <span class="logo-mark">🧭</span>
+        <span class="logo-text">myrimaven</span>
+      </a>
+
+      <div class="nav-links" id="nav-links">
+        <a class="nav-link" data-route="/" href="#/">Home</a>
+        <a class="nav-link" data-route="/discover" href="#/discover">Discover</a>
+        <a class="nav-link" data-route="/results" href="#/results">Summary</a>
+        <a class="nav-link" data-route="/recommendations" href="#/recommendations">Recommendations</a>
+        <a class="nav-link" data-route="/dashboard" href="#/dashboard">Dashboard</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-reset-btn" id="nav-reset-btn" title="Reset all data and start fresh">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          <span>Reset</span>
+        </button>
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- App Main Container -->
+  <main id="app" class="app-container"></main>
+
+  <!-- Global Toast Notifications -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main Application Controller -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
