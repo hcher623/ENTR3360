@@ -14,8 +14,12 @@ export function AuthProvider({ children }) {
   // Expose { name, email, image } to match the shape the rest of the app expects
   const user = session?.user ?? null;
 
-  const googleSignIn = () =>
-    signIn('google', { callbackUrl: window.location.href });
+  const googleSignIn = () => {
+    const callbackUrl = typeof window !== 'undefined'
+      ? `${window.location.pathname}${window.location.search}` || '/'
+      : '/';
+    return signIn('google', { callbackUrl });
+  };
 
   const handleSignOut = () =>
     signOut({ callbackUrl: '/' });
