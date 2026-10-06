@@ -1,6 +1,7 @@
 import '../styles.css';
 import { ProfileProvider } from './context/ProfileContext';
 import { AuthProvider } from './context/AuthContext';
+import SessionWrapper from './components/SessionWrapper';
 import NavHeader from './components/NavHeader';
 import ResetModal from './components/ResetModal';
 import ToastNotification from './components/ToastNotification';
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>" />
       </head>
       <body>
+        <SessionWrapper>
         <AuthProvider>
         <ProfileProvider>
           <NavHeader />
@@ -33,6 +35,7 @@ export default function RootLayout({ children }) {
           <ToastNotification />
         </ProfileProvider>
         </AuthProvider>
+        </SessionWrapper>
       </body>
     </html>
   );

@@ -77,7 +77,10 @@ export default function NavHeader() {
                   aria-label="User menu"
                   title={user.name}
                 >
-                  <span className="nav-avatar-initials">{initials}</span>
+                  {user.image
+                    ? <img src={user.image} alt={user.name} className="nav-avatar-img" referrerPolicy="no-referrer" />
+                    : <span className="nav-avatar-initials">{initials}</span>
+                  }
                 </button>
 
                 {showUserMenu && (

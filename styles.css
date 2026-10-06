@@ -1890,3 +1890,50 @@ a {
   color: var(--color-near-black);
 }
 
+/* Google Sign-In Button */
+.btn-google-signin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.975rem;
+  font-weight: 500;
+  color: var(--color-near-black);
+  background: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-google-signin:hover {
+  border-color: #4285F4;
+  box-shadow: 0 2px 12px rgba(66, 133, 244, 0.15);
+  background: #fafafe;
+}
+
+.btn-google-signin:active {
+  transform: scale(0.98);
+}
+
+.auth-modal-legal {
+  margin-top: var(--space-md);
+  font-size: 0.775rem;
+  color: var(--color-warm-gray-light);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Nav user avatar image (Google profile photo) */
+.nav-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
