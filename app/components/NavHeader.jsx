@@ -10,9 +10,8 @@ import AuthModal from './AuthModal';
 export default function NavHeader() {
   const pathname = usePathname();
   const { profile, setShowResetDialog } = useProfile();
-  const { user, isAuthenticated, signOut } = useAuth();
+  const { user, isAuthenticated, signOut, showAuthModal, setShowAuthModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const navLinks = [
@@ -21,6 +20,7 @@ export default function NavHeader() {
     { label: 'Summary', href: '/results' },
     { label: 'Recommendations', href: '/recommendations' },
     { label: 'Compare Careers', href: '/dashboard' },
+    { label: 'My Records', href: '/saved' },
   ];
 
   const initials = user?.name
@@ -95,11 +95,21 @@ export default function NavHeader() {
                         <span className="nav-user-email">{user.email}</span>
                       </div>
                       <hr className="nav-user-divider" />
-                      <button
-                        id="nav-signout-btn"
+                      <Link
+                        href="/saved"
                         className="nav-user-action"
                         role="menuitem"
+                        onClick={() => setShowUserMenu(false)}
+                        style={{ display: 'block', textDecoration: 'none' }}
+                      >
+                        📂 My Records & Notes
+                      </Link>
+                      <button
+                        id="nav-signout-btn"
+                        className="nav-user-action danger"
+                        role="menuitem"
                         onClick={() => { signOut(); setShowUserMenu(false); }}
+                        style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}
                       >
                         Sign out
                       </button>

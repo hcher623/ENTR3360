@@ -1,14 +1,52 @@
 'use client';
 
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from 'react';
+import { useAuth, TEST_ACCOUNT } from '../context/AuthContext';
 
 export default function AuthModal({ onClose }) {
-  const { signIn } = useAuth();
+  const { signIn, signUp, signInWithTestAccount, authError, setAuthError } = useAuth();
+  const [mode, setMode] = useState('signin'); // 'signin' | 'signup'
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [localMsg, setLocalMsg] = useState('');
 
-  const handleGoogle = () => {
-    signIn();
-    onClose();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLocalMsg('');
+    if (!email || !password) {
+      setLocalMsg('Please enter both email and password.');
+      return;
+    }
+    if (mode === 'signup' && password.length < 6) {
+      setLocalMsg('Password must be at least 6 characters.');
+      return;
+    }
+
+    setLoading(true);
+    let res;
+    if (mode === 'signup') {
+      res = await signUp(email, password, name);
+    } else {
+      res = await signIn(email, password);
+    }
+    setLoading(false);
+
+    if (res?.error) {
+      setLocalMsg(res.error);
+    } else if (res?.success) {
+      onClose();
+    }
+  };
+
+  const handleTestAccount = async () => {
+    setLoading(true);
+    const res = await signInWithTestAccount();
+    setLoading(false);
+    if (res?.success) {
+      onClose();
+    }
   };
 
   return (
@@ -19,8 +57,9 @@ export default function AuthModal({ onClose }) {
         aria-modal="true"
         aria-labelledby="auth-modal-title"
         onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: 440 }}
       >
-        {/* Close */}
+        {/* Close Button */}
         <button
           id="auth-modal-close"
           className="auth-modal-close"
@@ -31,34 +70,150 @@ export default function AuthModal({ onClose }) {
         </button>
 
         {/* Header */}
-        <div className="auth-modal-header">
+        <div className="auth-modal-header" style={{ marginBottom: 'var(--space-md)' }}>
           <span className="auth-modal-icon">🧭</span>
-          <h2 id="auth-modal-title" className="auth-modal-title">
-            Welcome to CareerCompass
+          <h2 id="auth-modal-title" className="auth-modal-title" style={{ fontSize: '1.6rem', margin: '0.2rem 0' }}>
+            {mode === 'signin' ? 'Welcome Back' : 'Create an Account'}
           </h2>
-          <p className="auth-modal-subtitle">
-            Sign in to save your career journey and access your personalised recommendations.
+          <p className="auth-modal-subtitle" style={{ fontSize: '0.875rem' }}>
+            {mode === 'signin' 
+              ? 'Sign in to access your private saved paths and personalized records.' 
+              : 'Create an account to save your discoveries across sessions.'}
           </p>
         </div>
 
-        {/* Google Sign-In */}
-        <button
-          id="auth-google-btn"
-          className="btn-google-signin"
-          onClick={handleGoogle}
-        >
-          <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            <path fill="none" d="M0 0h48v48H0z"/>
-          </svg>
-          Continue with Google
-        </button>
+        {/* One-Click Grader / Test Account Button */}
+        <div style={{ background: 'var(--color-forest-tint)', border: '1px solid rgba(30, 64, 48, 0.2)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-sm) var(--space-md)', marginBottom: 'var(--space-md)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-forest)', letterSpacing: '0.04em' }}>
+                Course Grader / Test Account
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--color-warm-gray)' }}>
+                <code>{TEST_ACCOUNT.email}</code>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={handleTestAccount}
+              disabled={loading}
+              style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+            >
+              ⚡ 1-Click Login
+            </button>
+          </div>
+        </div>
 
-        <p className="auth-modal-legal">
-          By signing in you agree to CareerCompass terms of service and privacy policy.
+        {/* Tab Switcher */}
+        <div style={{ display: 'flex', background: 'var(--color-cream-dark)', borderRadius: 'var(--radius-full)', padding: 3, marginBottom: 'var(--space-md)' }}>
+          <button
+            type="button"
+            onClick={() => { setMode('signin'); setLocalMsg(''); }}
+            style={{
+              flex: 1,
+              padding: '0.45rem',
+              borderRadius: 'var(--radius-full)',
+              border: 'none',
+              background: mode === 'signin' ? 'var(--color-white)' : 'transparent',
+              fontWeight: mode === 'signin' ? 600 : 400,
+              color: 'var(--color-near-black)',
+              boxShadow: mode === 'signin' ? 'var(--shadow-sm)' : 'none',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMode('signup'); setLocalMsg(''); }}
+            style={{
+              flex: 1,
+              padding: '0.45rem',
+              borderRadius: 'var(--radius-full)',
+              border: 'none',
+              background: mode === 'signup' ? 'var(--color-white)' : 'transparent',
+              fontWeight: mode === 'signup' ? 600 : 400,
+              color: 'var(--color-near-black)',
+              boxShadow: mode === 'signup' ? 'var(--shadow-sm)' : 'none',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            Create Account
+          </button>
+        </div>
+
+        {/* Error message */}
+        {(localMsg || authError) && (
+          <div style={{ background: 'var(--color-danger-tint)', border: '1px solid rgba(220, 38, 38, 0.25)', color: 'var(--color-danger)', borderRadius: 'var(--radius-md)', padding: '0.5rem 0.75rem', fontSize: '0.825rem', marginBottom: 'var(--space-sm)' }}>
+            ⚠️ {localMsg || authError}
+          </div>
+        )}
+
+        {/* Auth Form */}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+          {mode === 'signup' && (
+            <div>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--color-near-black)' }}>
+                Your Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Alex Morgan"
+                className="input-field"
+                style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: 'var(--radius-md)', border: '1.5px solid var(--color-border)', fontSize: '0.9rem' }}
+              />
+            </div>
+          )}
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--color-near-black)' }}>
+              Email Address
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@university.edu"
+              required
+              className="input-field"
+              style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: 'var(--radius-md)', border: '1.5px solid var(--color-border)', fontSize: '0.9rem' }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--color-near-black)' }}>
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder={mode === 'signup' ? 'Min 6 characters' : 'Enter password'}
+              required
+              className="input-field"
+              style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: 'var(--radius-md)', border: '1.5px solid var(--color-border)', fontSize: '0.9rem' }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+            style={{ width: '100%', marginTop: 'var(--space-xs)', padding: '0.65rem' }}
+          >
+            {loading ? 'Processing...' : (mode === 'signin' ? 'Sign In →' : 'Create My Account →')}
+          </button>
+        </form>
+
+        <p className="auth-modal-legal" style={{ marginTop: 'var(--space-md)', fontSize: '0.75rem', color: 'var(--color-warm-gray)' }}>
+          By continuing, you agree to CareerCompass prototype evaluation terms. Sessions persist automatically across page refreshes.
         </p>
       </div>
     </div>

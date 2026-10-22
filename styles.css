@@ -1718,22 +1718,35 @@ a {
 }
 
 .nav-user-action {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
   width: 100%;
   text-align: left;
-  padding: var(--space-xs) var(--space-sm);
-  font-size: 0.875rem;
+  padding: 0.5rem var(--space-sm);
+  font-size: 0.85rem;
   font-weight: 500;
-  color: var(--color-danger);
+  color: var(--color-near-black);
   border-radius: var(--radius-sm);
   background: transparent;
   cursor: pointer;
   font-family: var(--font-sans);
-  transition: background 0.15s ease;
+  transition: all 0.15s ease;
+  text-decoration: none;
 }
 
 .nav-user-action:hover {
+  background: var(--color-cream-dark);
+  color: var(--color-forest);
+}
+
+.nav-user-action.danger {
+  color: var(--color-danger);
+}
+
+.nav-user-action.danger:hover {
   background: var(--color-danger-tint);
+  color: var(--color-danger);
 }
 
 /* ── Auth Modal ───────────────────────────────────────── */
