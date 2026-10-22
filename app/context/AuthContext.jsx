@@ -119,14 +119,33 @@ export function AuthProvider({ children }) {
     // 2. If Supabase is configured
     if (isSupabaseConfigured && supabase) {
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        let { data, error } = await supabase.auth.signInWithPassword({
           email: cleanEmail,
           password
         });
+
+        // If email was unconfirmed from a previous registration, auto-confirm it and retry
+        if (error && error.message.toLowerCase().includes('not confirmed')) {
+          try {
+            await fetch('/api/auth/confirm', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: cleanEmail })
+            });
+            const retry = await supabase.auth.signInWithPassword({
+              email: cleanEmail,
+              password
+            });
+            data = retry.data;
+            error = retry.error;
+          } catch (_) {}
+        }
+
         if (error) {
           setAuthError(error.message);
           return { error: error.message };
         }
+
         if (data?.user) {
           const u = {
             id: data.user.id,
@@ -143,7 +162,7 @@ export function AuthProvider({ children }) {
       }
     }
 
-    // 3. Fallback direct authentication (guarantees local & demo functionality)
+    // 3. Fallback direct authentication
     const fallbackUser = {
       id: 'usr_' + Math.abs(cleanEmail.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0)),
       email: cleanEmail,
@@ -162,14 +181,33 @@ export function AuthProvider({ children }) {
     const cleanEmail = email.trim().toLowerCase();
     const displayName = (name || cleanEmail.split('@')[0]).trim();
 
+    try {
+      // 1. Call server registration endpoint (auto-confirms user with zero email barrier)
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password, name: displayName })
+      });
+
+      const json = await res.json();
+      if (!res.ok || json.error) {
+        setAuthError(json.error || 'Failed to create account');
+        return { error: json.error || 'Failed to create account' };
+      }
+
+      // 2. Immediately sign in to establish persistent session
+      return await signIn(cleanEmail, password);
+    } catch (err) {
+      console.warn('API registration error, trying client fallback:', err);
+    }
+
+    // Fallback if API route is unreachable
     if (isSupabaseConfigured && supabase) {
       try {
         const { data, error } = await supabase.auth.signUp({
           email: cleanEmail,
           password,
-          options: {
-            data: { name: displayName }
-          }
+          options: { data: { name: displayName } }
         });
         if (error) {
           setAuthError(error.message);
@@ -186,12 +224,11 @@ export function AuthProvider({ children }) {
           return { success: true, user: u };
         }
       } catch (err) {
-        setAuthError(err.message || 'Error creating account');
+        setAuthError(err.message);
         return { error: err.message };
       }
     }
 
-    // Fallback: create and sign in immediately
     const newUser = {
       id: 'usr_' + Date.now(),
       email: cleanEmail,
