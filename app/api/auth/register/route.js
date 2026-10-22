@@ -1,8 +1,21 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hitnwhinhzrqzabdiyyx.supabase.co';
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpdG53aGluaHpycXphYmRpeXl4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MDI2MTAzMSwiZXhwIjoyMTA1ODM3MDMxfQ.MoHmIiIDwhhzToNZfs3hM8c4G9Tomew2V7UGs6hAkoY';
+const FALLBACK_URL = 'https://hitnwhinhzrqzabdiyyx.supabase.co';
+const FALLBACK_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpdG53aGluaHpycXphYmRpeXl4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MDI2MTAzMSwiZXhwIjoyMTA1ODM3MDMxfQ.MoHmIiIDwhhzToNZfs3hM8c4G9Tomew2V7UGs6hAkoY';
+
+function cleanString(str, fallback) {
+  if (!str) return fallback;
+  let s = String(str).trim().replace(/[^\x20-\x7E]/g, '');
+  if (s.includes(' ')) s = s.split(/\s+/)[0];
+  s = s.replace(/\.+$/, '');
+  const parts = s.split('.');
+  if (parts.length > 3) s = parts.slice(0, 3).join('.');
+  return s || fallback;
+}
+
+const supabaseUrl = cleanString(process.env.NEXT_PUBLIC_SUPABASE_URL, FALLBACK_URL).replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+const serviceKey = cleanString(process.env.SUPABASE_SERVICE_ROLE_KEY, FALLBACK_SERVICE_KEY);
 
 const adminClient = createClient(supabaseUrl, serviceKey, {
   auth: { autoRefreshToken: false, persistSession: false }
