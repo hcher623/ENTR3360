@@ -37,7 +37,7 @@ export async function POST(req) {
     const displayName = (name || cleanEmail.split('@')[0]).trim();
 
     // 1. Create user with email_confirm: true (bypasses email confirmation completely)
-    const { data, error } = await adminClient.auth.admin.createUser({
+    let { data, error } = await adminClient.auth.admin.createUser({
       email: cleanEmail,
       password: password,
       email_confirm: true,
@@ -45,12 +45,24 @@ export async function POST(req) {
     });
 
     if (error) {
-      if (error.message.includes('already exists') || error.message.includes('registered')) {
-        return NextResponse.json({ 
-          error: 'An account with this email already exists. Please switch to Sign In.' 
-        }, { status: 400 });
+      if (error.message.toLowerCase().includes('already exists') || error.message.toLowerCase().includes('registered')) {
+        // If account already exists, seamlessly update password to what they just entered
+        const { data: list } = await adminClient.auth.admin.listUsers();
+        const existing = list?.users?.find(u => u.email?.toLowerCase() === cleanEmail);
+        if (existing) {
+          const updateRes = await adminClient.auth.admin.updateUserById(existing.id, {
+            password: password,
+            email_confirm: true,
+            user_metadata: { name: displayName }
+          });
+          data = { user: updateRes.data?.user || existing };
+          error = null;
+        } else {
+          return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+      } else {
+        return NextResponse.json({ error: error.message }, { status: 400 });
       }
-      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     // 2. Ensure profile row exists in public.profiles
