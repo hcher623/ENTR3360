@@ -1,0 +1,100 @@
+[
+  {
+    "id": 1,
+    "user_id": "usr_001",
+    "career_id": "clinical-psychologist",
+    "created_at": "2026-10-01T10:15:00Z",
+    "notes": "Top match from pre-med pivot."
+  },
+  {
+    "id": 2,
+    "user_id": "usr_001",
+    "career_id": "public-interest-lawyer",
+    "created_at": "2026-10-01T10:20:00Z",
+    "notes": "High impact advocacy route."
+  },
+  {
+    "id": 3,
+    "user_id": "usr_001",
+    "career_id": "ux-researcher",
+    "created_at": "2026-10-01T10:25:00Z",
+    "notes": "Psychology in tech application."
+  },
+  {
+    "id": 4,
+    "user_id": "usr_002",
+    "career_id": "machine-learning-engineer",
+    "created_at": "2026-10-02T11:40:00Z",
+    "notes": "Core technical path."
+  },
+  {
+    "id": 5,
+    "user_id": "usr_002",
+    "career_id": "climate-data-scientist",
+    "created_at": "2026-10-02T11:45:00Z",
+    "notes": "Intersection of data and physical science."
+  },
+  {
+    "id": 6,
+    "user_id": "usr_002",
+    "career_id": "technical-product-manager",
+    "created_at": "2026-10-02T11:50:00Z",
+    "notes": "Cross-functional systems leadership."
+  },
+  {
+    "id": 7,
+    "user_id": "usr_003",
+    "career_id": "learning-experience-designer",
+    "created_at": "2026-10-03T09:30:00Z",
+    "notes": "Design meets human pedagogy."
+  },
+  {
+    "id": 8,
+    "user_id": "usr_003",
+    "career_id": "creative-director",
+    "created_at": "2026-10-03T09:35:00Z",
+    "notes": "Strategic creative leadership."
+  },
+  {
+    "id": 9,
+    "user_id": "usr_004",
+    "career_id": "clean-energy-engineer",
+    "created_at": "2026-10-05T14:30:00Z",
+    "notes": "Renewable infrastructure focus."
+  },
+  {
+    "id": 10,
+    "user_id": "usr_004",
+    "career_id": "environmental-policy-analyst",
+    "created_at": "2026-10-05T14:35:00Z",
+    "notes": "Regulatory impact."
+  },
+  {
+    "id": 11,
+    "user_id": "usr_005",
+    "career_id": "technical-product-manager",
+    "created_at": "2026-10-07T17:00:00Z",
+    "notes": "Strategic execution."
+  },
+  {
+    "id": 12,
+    "user_id": "usr_006",
+    "career_id": "nonprofit-program-manager",
+    "created_at": "2026-10-10T12:10:00Z",
+    "notes": "Community leadership role."
+  },
+  {
+    "id": 13,
+    "user_id": "usr_007",
+    "career_id": "data-journalist",
+    "created_at": "2026-10-12T08:45:00Z",
+    "notes": "Investigative storytelling."
+  },
+  {
+    "id": 14,
+    "user_id": "usr_008",
+    "career_id": "quantitative-analyst",
+    "created_at": "2026-10-15T11:20:00Z",
+    "notes": "Algorithmic decision-making."
+  }
+]

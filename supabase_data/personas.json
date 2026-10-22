@@ -1,0 +1,253 @@
+[
+  {
+    "id": "priya",
+    "name": "Priya",
+    "role": "Pre-med student reconsidering her path",
+    "description": "Strong clinical foundation, deeply empathetic, but questioning the 10-year residency route. Wants to help people with research-backed impact without hospital burnout.",
+    "avatar": "👩‍⚕️",
+    "badge": "Health & Human Focus",
+    "profile": {
+      "name": "Priya",
+      "personality": {
+        "introvert": 30,
+        "analytical": 25,
+        "structured": 45,
+        "collaborative": 65
+      },
+      "interests": [
+        "Health & Medicine",
+        "Psychology & Behavior",
+        "People & Society",
+        "Science & Research"
+      ],
+      "skills": [
+        "Empathy & Active Listening",
+        "Research & Investigation",
+        "Critical Thinking",
+        "Communication",
+        "Scientific Method"
+      ],
+      "values": [
+        "Helping Others",
+        "Intellectual Challenge",
+        "Making a Real Impact"
+      ],
+      "environment": "Hybrid"
+    }
+  },
+  {
+    "id": "marcus",
+    "name": "Marcus",
+    "role": "CS graduate unsure whether to stay in tech",
+    "description": "Technically gifted programmer who feels disconnected from purely commercial software. Looking for roles at the intersection of AI, policy, ethics, and tangible systems.",
+    "avatar": "👨‍💻",
+    "badge": "Tech & Systems",
+    "profile": {
+      "name": "Marcus",
+      "personality": {
+        "introvert": 25,
+        "analytical": 15,
+        "structured": 40,
+        "collaborative": 45
+      },
+      "interests": [
+        "Technology",
+        "Data & Analytics",
+        "Business & Finance",
+        "Social Justice"
+      ],
+      "skills": [
+        "Programming",
+        "Data Analysis",
+        "Critical Thinking",
+        "Problem-Solving",
+        "Statistics"
+      ],
+      "values": [
+        "Intellectual Challenge",
+        "Innovation & Cutting-Edge Work",
+        "High Income",
+        "Making a Real Impact"
+      ],
+      "environment": "Remote"
+    }
+  },
+  {
+    "id": "leah",
+    "name": "Leah",
+    "role": "Art school grad looking for meaningful work",
+    "description": "Creative storyteller seeking a stable, high-impact career that bridges visual design, human understanding, and social education without corporate emptiness.",
+    "avatar": "🎨",
+    "badge": "Creative & Design",
+    "profile": {
+      "name": "Leah",
+      "personality": {
+        "introvert": 55,
+        "analytical": 80,
+        "structured": 70,
+        "collaborative": 60
+      },
+      "interests": [
+        "Arts & Design",
+        "People & Society",
+        "Writing & Media",
+        "Education & Teaching",
+        "Social Justice"
+      ],
+      "skills": [
+        "Creativity",
+        "Communication",
+        "Design Thinking",
+        "Writing & Storytelling",
+        "Empathy & Active Listening"
+      ],
+      "values": [
+        "Creative Expression",
+        "Making a Real Impact",
+        "Community",
+        "Helping Others"
+      ],
+      "environment": "Hybrid"
+    }
+  },
+  {
+    "id": "jordan",
+    "name": "Jordan",
+    "role": "Environmental studies senior torn between policy & field work",
+    "description": "Deeply committed to climate action, loves data models, but wants to see tangible community outcomes rather than bureaucratic paperwork.",
+    "avatar": "🌱",
+    "badge": "Climate & Policy",
+    "profile": {
+      "name": "Jordan",
+      "personality": {
+        "introvert": 45,
+        "analytical": 20,
+        "structured": 50,
+        "collaborative": 70
+      },
+      "interests": [
+        "Nature & Environment",
+        "Environmental Issues",
+        "Law & Policy",
+        "Data & Analytics"
+      ],
+      "skills": [
+        "Research & Investigation",
+        "Data Analysis",
+        "Project Management",
+        "Communication"
+      ],
+      "values": [
+        "Making a Real Impact",
+        "Autonomy & Independence",
+        "Community"
+      ],
+      "environment": "Hybrid"
+    }
+  },
+  {
+    "id": "elena",
+    "name": "Elena",
+    "role": "Graphic designer pivoting toward high-tech product design",
+    "description": "Experienced in branding and typography, now transitioning into UX and human-computer interaction for accessible software platforms.",
+    "avatar": "🎨",
+    "badge": "UX & Product",
+    "profile": {
+      "name": "Elena",
+      "personality": {
+        "introvert": 60,
+        "analytical": 40,
+        "structured": 65,
+        "collaborative": 75
+      },
+      "interests": [
+        "Arts & Design",
+        "Technology",
+        "Psychology & Behavior",
+        "Writing & Media"
+      ],
+      "skills": [
+        "Design Thinking",
+        "Creativity",
+        "Empathy & Active Listening",
+        "Teamwork & Collaboration"
+      ],
+      "values": [
+        "Creative Expression",
+        "Intellectual Challenge",
+        "Work-Life Balance"
+      ],
+      "environment": "Remote"
+    }
+  },
+  {
+    "id": "samir",
+    "name": "Samir",
+    "role": "Economics graduate evaluating social finance vs tech analytics",
+    "description": "Strong quantitative instincts, passionate about economic mobility and ethical algorithms. Wants high rigor with human impact.",
+    "avatar": "📊",
+    "badge": "Analytics & Finance",
+    "profile": {
+      "name": "Samir",
+      "personality": {
+        "introvert": 35,
+        "analytical": 15,
+        "structured": 30,
+        "collaborative": 50
+      },
+      "interests": [
+        "Business & Finance",
+        "Data & Analytics",
+        "Technology",
+        "Social Justice"
+      ],
+      "skills": [
+        "Data Analysis",
+        "Statistics",
+        "Critical Thinking",
+        "Problem-Solving"
+      ],
+      "values": [
+        "High Income",
+        "Intellectual Challenge",
+        "Making a Real Impact"
+      ],
+      "environment": "Hybrid"
+    }
+  },
+  {
+    "id": "maya",
+    "name": "Maya",
+    "role": "Education advocate building digital learning tools",
+    "description": "Former high school tutor passionate about scalable educational technology, curriculum redesign, and student motivation.",
+    "avatar": "📚",
+    "badge": "EdTech & Learning",
+    "profile": {
+      "name": "Maya",
+      "personality": {
+        "introvert": 40,
+        "analytical": 50,
+        "structured": 55,
+        "collaborative": 80
+      },
+      "interests": [
+        "Education & Teaching",
+        "People & Society",
+        "Writing & Media",
+        "Technology"
+      ],
+      "skills": [
+        "Teaching & Mentoring",
+        "Communication",
+        "Writing & Storytelling",
+        "Project Management"
+      ],
+      "values": [
+        "Helping Others",
+        "Making a Real Impact",
+        "Collaboration & Teamwork"
+      ],
+      "environment": "Remote"
+    }
+  }
+]

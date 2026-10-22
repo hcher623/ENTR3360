@@ -1,0 +1,241 @@
+[
+  {
+    "id": "usr_001",
+    "user_email": "priya.patel@example.com",
+    "name": "Priya Patel",
+    "archetype_name": "Strategic Collaborator",
+    "personality": {
+      "introvert": 30,
+      "analytical": 25,
+      "structured": 45,
+      "collaborative": 65
+    },
+    "interests": [
+      "Health & Medicine",
+      "Psychology & Behavior",
+      "People & Society"
+    ],
+    "skills": [
+      "Empathy & Active Listening",
+      "Research & Investigation",
+      "Critical Thinking"
+    ],
+    "values": [
+      "Helping Others",
+      "Intellectual Challenge",
+      "Making a Real Impact"
+    ],
+    "environment_preference": "Hybrid",
+    "created_at": "2026-10-01T10:00:00Z"
+  },
+  {
+    "id": "usr_002",
+    "user_email": "marcus.chen@example.com",
+    "name": "Marcus Chen",
+    "archetype_name": "Systematic Thinker",
+    "personality": {
+      "introvert": 25,
+      "analytical": 15,
+      "structured": 40,
+      "collaborative": 45
+    },
+    "interests": [
+      "Technology",
+      "Data & Analytics",
+      "Social Justice"
+    ],
+    "skills": [
+      "Programming",
+      "Data Analysis",
+      "Statistics",
+      "Problem-Solving"
+    ],
+    "values": [
+      "Intellectual Challenge",
+      "High Income",
+      "Innovation & Cutting-Edge Work"
+    ],
+    "environment_preference": "Remote",
+    "created_at": "2026-10-02T11:30:00Z"
+  },
+  {
+    "id": "usr_003",
+    "user_email": "leah.ross@example.com",
+    "name": "Leah Ross",
+    "archetype_name": "Creative Connector",
+    "personality": {
+      "introvert": 55,
+      "analytical": 80,
+      "structured": 70,
+      "collaborative": 60
+    },
+    "interests": [
+      "Arts & Design",
+      "People & Society",
+      "Education & Teaching"
+    ],
+    "skills": [
+      "Creativity",
+      "Communication",
+      "Design Thinking",
+      "Writing & Storytelling"
+    ],
+    "values": [
+      "Creative Expression",
+      "Community",
+      "Helping Others"
+    ],
+    "environment_preference": "Hybrid",
+    "created_at": "2026-10-03T09:15:00Z"
+  },
+  {
+    "id": "usr_004",
+    "user_email": "alex.morales@example.com",
+    "name": "Alex Morales",
+    "archetype_name": "Deep Specialist",
+    "personality": {
+      "introvert": 20,
+      "analytical": 15,
+      "structured": 30,
+      "collaborative": 35
+    },
+    "interests": [
+      "Science & Research",
+      "Environmental Issues",
+      "Data & Analytics"
+    ],
+    "skills": [
+      "Scientific Method",
+      "Data Analysis",
+      "Critical Thinking",
+      "Research & Investigation"
+    ],
+    "values": [
+      "Intellectual Challenge",
+      "Autonomy & Independence",
+      "Job Stability"
+    ],
+    "environment_preference": "On-site",
+    "created_at": "2026-10-05T14:20:00Z"
+  },
+  {
+    "id": "usr_005",
+    "user_email": "chloe.dupont@example.com",
+    "name": "Chloe Dupont",
+    "archetype_name": "Structured Visionary",
+    "personality": {
+      "introvert": 45,
+      "analytical": 35,
+      "structured": 25,
+      "collaborative": 75
+    },
+    "interests": [
+      "Technology",
+      "Business & Finance",
+      "Arts & Design"
+    ],
+    "skills": [
+      "Project Management",
+      "Leadership",
+      "Communication",
+      "Problem-Solving"
+    ],
+    "values": [
+      "Career Growth",
+      "Making a Real Impact",
+      "High Income"
+    ],
+    "environment_preference": "Hybrid",
+    "created_at": "2026-10-07T16:45:00Z"
+  },
+  {
+    "id": "usr_006",
+    "user_email": "devon.king@example.com",
+    "name": "Devon King",
+    "archetype_name": "Organized Catalyst",
+    "personality": {
+      "introvert": 40,
+      "analytical": 45,
+      "structured": 20,
+      "collaborative": 80
+    },
+    "interests": [
+      "Social Justice",
+      "Law & Policy",
+      "People & Society"
+    ],
+    "skills": [
+      "Public Speaking",
+      "Negotiation",
+      "Organization & Planning",
+      "Leadership"
+    ],
+    "values": [
+      "Making a Real Impact",
+      "Helping Others",
+      "Recognition & Status"
+    ],
+    "environment_preference": "Office",
+    "created_at": "2026-10-10T12:00:00Z"
+  },
+  {
+    "id": "usr_007",
+    "user_email": "taylor.brooks@example.com",
+    "name": "Taylor Brooks",
+    "archetype_name": "Independent Creative",
+    "personality": {
+      "introvert": 65,
+      "analytical": 70,
+      "structured": 80,
+      "collaborative": 30
+    },
+    "interests": [
+      "Writing & Media",
+      "Arts & Design",
+      "Psychology & Behavior"
+    ],
+    "skills": [
+      "Writing & Storytelling",
+      "Creativity",
+      "Research & Investigation"
+    ],
+    "values": [
+      "Autonomy & Independence",
+      "Work-Life Balance",
+      "Creative Expression"
+    ],
+    "environment_preference": "Remote",
+    "created_at": "2026-10-12T08:30:00Z"
+  },
+  {
+    "id": "usr_008",
+    "user_email": "hassan.student@example.com",
+    "name": "Hassan Student",
+    "archetype_name": "Versatile Explorer",
+    "personality": {
+      "introvert": 50,
+      "analytical": 50,
+      "structured": 50,
+      "collaborative": 50
+    },
+    "interests": [
+      "Technology",
+      "Business & Finance",
+      "Engineering",
+      "Data & Analytics"
+    ],
+    "skills": [
+      "Problem-Solving",
+      "Project Management",
+      "Critical Thinking",
+      "Programming"
+    ],
+    "values": [
+      "Making a Real Impact",
+      "Career Growth",
+      "High Income"
+    ],
+    "environment_preference": "Hybrid",
+    "created_at": "2026-10-15T11:10:00Z"
+  }
+]
