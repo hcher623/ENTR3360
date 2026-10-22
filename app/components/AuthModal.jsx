@@ -34,7 +34,7 @@ export default function AuthModal({ onClose }) {
         <div className="auth-modal-header">
           <span className="auth-modal-icon">🧭</span>
           <h2 id="auth-modal-title" className="auth-modal-title">
-            Welcome to Myrimaven
+            Welcome to CareerCompass
           </h2>
           <p className="auth-modal-subtitle">
             Sign in to save your career journey and access your personalised recommendations.
@@ -58,7 +58,7 @@ export default function AuthModal({ onClose }) {
         </button>
 
         <p className="auth-modal-legal">
-          By signing in you agree to Myrimaven's terms of service and privacy policy.
+          By signing in you agree to CareerCompass terms of service and privacy policy.
         </p>
       </div>
     </div>

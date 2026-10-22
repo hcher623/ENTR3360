@@ -1,5 +1,5 @@
 /**
- * Myrimaven Matching Engine & Fit Analysis
+ * CareerCompass Matching Engine & Fit Analysis
  * Differentiated scoring and dual-sided explanations:
  * - Why a career fits the user
  * - Tradeoffs & watch-outs: Why it may NOT fit (answering key feedback)
@@ -28,25 +28,46 @@ export function scorePersonality(personality, fit) {
   return scores.reduce((sum, s) => sum + s, 0) / scores.length;
 }
 
+/**
+ * Calculates a balanced overlap score between user selections and career requirements.
+ * Solves the issue where users selecting fewer items were unfairly penalized:
+ * - Recall: Measures career requirement coverage.
+ * - Precision: Rewards focused, intentional selections and penalizes blanket clicking.
+ * - Effective Target: Adjusts expected denominator for concise profiles (1-3 items)
+ *   so a focused user isn't capped at an artificially low score.
+ */
+export function calculateOverlapScore(userSelected, careerItems) {
+  if (!careerItems || careerItems.length === 0) return 0;
+  if (!userSelected || userSelected.length === 0) return 0;
+
+  const matched = careerItems.filter(i => userSelected.includes(i));
+  if (matched.length === 0) return 0;
+
+  const recall = matched.length / careerItems.length;
+  const precision = matched.length / userSelected.length;
+
+  // Soft target: concise users (1-3 items) are evaluated against attainable items
+  const minExpected = Math.min(careerItems.length, Math.max(userSelected.length, 3));
+  const effectiveRecall = matched.length / minExpected;
+
+  // Balanced blend: 65% effective coverage + 35% focus precision
+  const score = (effectiveRecall * 0.65) + (precision * 0.35);
+  return clamp(score);
+}
+
 export function matchCareer(career, profile) {
   if (!profile) return null;
 
   const personalityScore = scorePersonality(profile.personality, career.personalityFit);
 
   const matchedInterests = (career.relatedInterests || []).filter(i => (profile.interests || []).includes(i));
-  const interestScore = career.relatedInterests?.length > 0 
-    ? matchedInterests.length / career.relatedInterests.length 
-    : 0;
+  const interestScore = calculateOverlapScore(profile.interests, career.relatedInterests);
 
   const matchedSkills = (career.requiredSkills || []).filter(s => (profile.skills || []).includes(s));
-  const skillsScore = career.requiredSkills?.length > 0 
-    ? matchedSkills.length / career.requiredSkills.length 
-    : 0;
+  const skillsScore = calculateOverlapScore(profile.skills, career.requiredSkills);
 
   const matchedValues = (career.alignedValues || []).filter(v => (profile.values || []).includes(v));
-  const valuesScore = career.alignedValues?.length > 0 
-    ? matchedValues.length / career.alignedValues.length 
-    : 0;
+  const valuesScore = calculateOverlapScore(profile.values, career.alignedValues);
 
   // Environment bonus
   let envBonus = 0;

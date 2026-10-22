@@ -279,10 +279,10 @@ export default function RecommendationsPage() {
         <div style={{ background: 'var(--color-cream-dark)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-xl)', padding: 'var(--space-xl)', marginTop: 'var(--space-2xl)', textAlign: 'center' }}>
           <h3 className="font-display" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-xs)' }}>Want to compare careers side-by-side?</h3>
           <p style={{ color: 'var(--color-warm-gray)', fontSize: '0.95rem', marginBottom: 'var(--space-lg)', maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
-            Open our Interactive Dashboard to compare 2 to 3 careers simultaneously across salaries, daily routines, and skills gaps.
+            Open our Compare Careers hub to evaluate 2 to 3 careers simultaneously across salaries, daily routines, and skills gaps.
           </p>
           <Link href="/dashboard" className="btn btn-primary">
-            Open Interactive Comparison Dashboard →
+            Compare Careers Side-by-Side →
           </Link>
         </div>
       </div>

@@ -2,13 +2,16 @@ import '../styles.css';
 import { ProfileProvider } from './context/ProfileContext';
 import { AuthProvider } from './context/AuthContext';
 import SessionWrapper from './components/SessionWrapper';
+import CourseDisclaimerBanner from './components/CourseDisclaimerBanner';
 import NavHeader from './components/NavHeader';
+import PersonaBar from './components/PersonaBar';
+import PersonaModal from './components/PersonaModal';
 import ResetModal from './components/ResetModal';
 import ToastNotification from './components/ToastNotification';
 
 export const metadata = {
-  title: 'Myrimaven — Career Discovery Platform',
-  description: 'An interactive platform discovering career paths that genuinely fit who you are. Differentiated matching, honest trade-offs, and no test pressure.',
+  title: 'CareerCompass — Career Discovery Platform',
+  description: 'An interactive platform discovering career paths that genuinely fit who you are. Differentiated matching, honest trade-offs, and no test pressure. Academic prototype for ENTR 3360.',
 };
 
 export default function RootLayout({ children }) {
@@ -27,11 +30,14 @@ export default function RootLayout({ children }) {
         <SessionWrapper>
         <AuthProvider>
         <ProfileProvider>
+          <CourseDisclaimerBanner />
           <NavHeader />
+          <PersonaBar />
           <main className="app-container">
             {children}
           </main>
           <ResetModal />
+          <PersonaModal />
           <ToastNotification />
         </ProfileProvider>
         </AuthProvider>

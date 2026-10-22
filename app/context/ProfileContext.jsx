@@ -5,8 +5,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ProfileContext = createContext(null);
 
 const STORAGE_KEYS = {
-  PROFILE: 'myrimaven_profile',
-  BOOKMARKS: 'myrimaven_bookmarks'
+  PROFILE: 'careercompass_profile',
+  BOOKMARKS: 'careercompass_bookmarks',
+  LEGACY_PROFILE: 'myrimaven_profile',
+  LEGACY_BOOKMARKS: 'myrimaven_bookmarks'
 };
 
 export function ProfileProvider({ children }) {
@@ -14,15 +16,16 @@ export function ProfileProvider({ children }) {
   const [bookmarks, setBookmarksState] = useState([]);
   const [toast, setToast] = useState(null);
   const [showResetDialog, setShowResetDialog] = useState(false);
+  const [showPersonaModal, setShowPersonaModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Initialize from localStorage on mount
+  // Initialize from localStorage on mount (with backwards compatibility)
   useEffect(() => {
     try {
-      const rawProfile = localStorage.getItem(STORAGE_KEYS.PROFILE);
+      const rawProfile = localStorage.getItem(STORAGE_KEYS.PROFILE) || localStorage.getItem(STORAGE_KEYS.LEGACY_PROFILE);
       if (rawProfile) setProfileState(JSON.parse(rawProfile));
 
-      const rawBookmarks = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
+      const rawBookmarks = localStorage.getItem(STORAGE_KEYS.BOOKMARKS) || localStorage.getItem(STORAGE_KEYS.LEGACY_BOOKMARKS);
       if (rawBookmarks) setBookmarksState(JSON.parse(rawBookmarks));
     } catch (e) {
       console.error('Error loading stored profile:', e);
@@ -43,10 +46,25 @@ export function ProfileProvider({ children }) {
     setProfileState(null);
     try {
       localStorage.removeItem(STORAGE_KEYS.PROFILE);
+      localStorage.removeItem(STORAGE_KEYS.LEGACY_PROFILE);
     } catch (e) {
       console.error('Error resetting profile:', e);
     }
     showToast('Profile reset successfully. Ready for a new start!', 'success');
+  };
+
+  const selectPersona = (persona) => {
+    if (!persona) return;
+    const personaProfile = {
+      ...persona.profile,
+      _personaId: persona.id,
+      _personaRole: persona.role,
+      _personaAvatar: persona.avatar,
+      _personaBadge: persona.badge
+    };
+    saveProfile(personaProfile);
+    setShowPersonaModal(false);
+    showToast(`Now exploring as ${persona.name}!`, 'success');
   };
 
   const toggleBookmark = (careerId) => {
@@ -75,12 +93,15 @@ export function ProfileProvider({ children }) {
       profile,
       saveProfile,
       resetProfile,
+      selectPersona,
       bookmarks,
       toggleBookmark,
       toast,
       showToast,
       showResetDialog,
       setShowResetDialog,
+      showPersonaModal,
+      setShowPersonaModal,
       isLoaded
     }}>
       {children}

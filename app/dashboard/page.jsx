@@ -77,17 +77,17 @@ export default function DashboardPage() {
 
   return (
     <div className="page container" id="dashboard-page">
-      {/* Dashboard Header */}
+      {/* Compare Careers Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 'var(--space-xl)', flexWrap: 'wrap', gap: 'var(--space-md)' }}>
         <div>
-          <div className="badge-tag">Interactive Explorer & Comparison Hub</div>
+          <div className="badge-tag">Side-by-Side Comparison & Career Details</div>
           <h1 className="font-display" style={{ fontSize: 'clamp(2.4rem, 4vw, 3.25rem)', fontWeight: 400, margin: 'var(--space-xs) 0' }}>
-            {profile ? `${profile.name || 'Your'} Career Landscape` : 'Explore All Careers'}
+            {profile ? `Compare Careers & Pathways for ${profile.name || 'You'}` : 'Compare Careers & Explore Pathways'}
           </h1>
           <p style={{ color: 'var(--color-warm-gray)', fontSize: '1.05rem', maxWidth: 650 }}>
             {profile 
-              ? 'Search, filter, or select 2 to 3 careers to compare side-by-side. Tweak answers or reset anytime.' 
-              : 'Browse all 15 careers or complete your discovery profile to see personalized compatibility scores.'}
+              ? 'Filter, analyze, and select 2 to 3 careers to compare side-by-side across compensation, daily realities, and personalized fit.' 
+              : 'Browse all 15 careers or select 2 to 3 to compare side-by-side. Complete your discovery profile for personalized scores.'}
           </p>
         </div>
 

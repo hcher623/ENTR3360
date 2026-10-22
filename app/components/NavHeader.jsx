@@ -20,7 +20,7 @@ export default function NavHeader() {
     { label: 'Discover', href: '/discover' },
     { label: 'Summary', href: '/results' },
     { label: 'Recommendations', href: '/recommendations' },
-    { label: 'Dashboard', href: '/dashboard' },
+    { label: 'Compare Careers', href: '/dashboard' },
   ];
 
   const initials = user?.name
@@ -31,9 +31,9 @@ export default function NavHeader() {
     <>
       <nav className="main-nav" id="main-nav">
         <div className="nav-inner">
-          <Link href="/" className="nav-logo" aria-label="Myrimaven Home">
+          <Link href="/" className="nav-logo" aria-label="CareerCompass Home">
             <span className="logo-mark">🧭</span>
-            <span className="logo-text">myrimaven</span>
+            <span className="logo-text">careercompass</span>
           </Link>
 
           <div className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>

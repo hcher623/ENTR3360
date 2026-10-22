@@ -299,7 +299,7 @@ export default function CareerDetailPage() {
 
             <div style={{ marginTop: 'var(--space-lg)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-md)' }}>
               <Link href="/dashboard" className="btn btn-secondary btn-sm" style={{ width: '100%', textAlign: 'center' }}>
-                Compare in Dashboard ⚖️
+                Compare with Other Careers ⚖️
               </Link>
             </div>
           </div>

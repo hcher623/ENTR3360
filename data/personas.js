@@ -1,5 +1,5 @@
 /**
- * Myrimaven Demo Personas
+ * CareerCompass Demo Personas
  * Realistic student/graduate personas showcasing differentiated recommendations.
  */
 

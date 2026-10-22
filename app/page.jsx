@@ -37,7 +37,7 @@ export default function HomePage() {
             </h1>
 
             <p className="hero-subtitle">
-              Not a quiz. Not a list of generic job titles. Myrimaven builds a holistic picture of who you are — your work style, your skills, your values — and surfaces careers where people like you find genuine fulfillment, with honest explanations of why.
+              Not a quiz. Not a list of generic job titles. CareerCompass builds a holistic picture of who you are — your work style, your skills, your values — and surfaces careers where people like you find genuine fulfillment, with honest explanations of why.
             </p>
 
             <div className="hero-actions">
@@ -104,7 +104,7 @@ export default function HomePage() {
       <section className="container">
         <div className="badge-tag" style={{ margin: '0 auto var(--space-xs)', display: 'table' }}>What Makes Us Different</div>
         <h2 className="section-headline">Different from anything you've taken before</h2>
-        <p className="section-sub">Traditional career tests force you into rigid boxes and tell you what jobs exist. Myrimaven explains fit honestly.</p>
+        <p className="section-sub">Traditional career tests force you into rigid boxes and tell you what jobs exist. CareerCompass explains fit honestly.</p>
 
         <div className="features-grid">
           <div className="feature-card">
@@ -131,7 +131,7 @@ export default function HomePage() {
       <section className="container" id="personas-section">
         <div className="badge-tag" style={{ margin: '0 auto var(--space-xs)', display: 'table' }}>Live Evidence</div>
         <h2 className="section-headline">Three people. Three very different paths.</h2>
-        <p className="section-sub">Load a demo profile and watch how Myrimaven responds to a specific person — not a generic template.</p>
+        <p className="section-sub">Load a demo profile and watch how CareerCompass responds to a specific person — not a generic template.</p>
 
         <div className="personas-grid">
           {PERSONAS.map(p => (

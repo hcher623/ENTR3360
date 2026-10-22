@@ -1,6 +1,6 @@
 /**
- * Myrimaven Career Taxonomy & Taxonomy Data
- * Extracted from Figma prototype specification.
+ * CareerCompass Career Taxonomy & Taxonomy Data
+ * Extracted from career taxonomy specification.
  */
 
 export const INTERESTS = [
