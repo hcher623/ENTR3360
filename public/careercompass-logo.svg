@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">CareerCompass</title>
+  <desc id="desc">Compass-inspired career guidance logo with a warm gold needle and forest green background.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1E4030"/>
+      <stop offset="100%" stop-color="#2B5B47"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#bg)"/>
+  <circle cx="128" cy="128" r="82" fill="none" stroke="#F8F5EF" stroke-opacity="0.35" stroke-width="4"/>
+  <circle cx="128" cy="128" r="12" fill="#F8F5EF" opacity="0.9"/>
+  <path d="M128 42 L147 110 L128 128 L109 110 Z" fill="#D97706"/>
+  <path d="M128 214 L109 146 L128 128 L147 146 Z" fill="#F8F5EF"/>
+  <path d="M42 128 L110 109 L128 128 L110 147 Z" fill="#F8F5EF" opacity="0.9"/>
+  <path d="M214 128 L146 147 L128 128 L146 109 Z" fill="#F8F5EF" opacity="0.9"/>
+  <circle cx="128" cy="128" r="18" fill="none" stroke="#F8F5EF" stroke-width="4"/>
+  <path d="M128 76 L136 102 L128 114 L120 102 Z" fill="#D97706"/>
+  <text x="128" y="212" text-anchor="middle" font-size="18" font-family="Outfit, Arial, sans-serif" letter-spacing="2" fill="#F8F5EF" opacity="0.9">CAREER</text>
+</svg>
