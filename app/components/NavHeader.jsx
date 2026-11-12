@@ -32,7 +32,7 @@ export default function NavHeader() {
       <nav className="main-nav" id="main-nav">
         <div className="nav-inner">
           <Link href="/" className="nav-logo" aria-label="CareerCompass Home">
-            <span className="logo-mark">🧭</span>
+            <img src="/careercompass-mark.svg" alt="" className="logo-mark" aria-hidden="true" />
             <span className="logo-text">careercompass</span>
           </Link>
 
@@ -67,7 +67,6 @@ export default function NavHeader() {
               </button>
             )}
 
-            {/* Auth area */}
             {isAuthenticated ? (
               <div className="nav-user-wrap">
                 <button

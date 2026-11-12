@@ -1,15 +1,74 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useProfile } from '../context/ProfileContext';
 import { matchCareers } from '../../engine/matcher.js';
 import { SECTORS } from '../../data/careers.js';
 
+const defaultLocation = 'Remote';
+
 export default function RecommendationsPage() {
   const { profile, bookmarks, toggleBookmark, isLoaded } = useProfile();
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeSort, setActiveSort] = useState('score');
+  const [jobSearch, setJobSearch] = useState('');
+  const [jobLocation, setJobLocation] = useState(defaultLocation);
+  const [jobs, setJobs] = useState([]);
+  const [jobsLoading, setJobsLoading] = useState(false);
+  const [jobsError, setJobsError] = useState('');
+
+  useEffect(() => {
+    if (!profile) return;
+    const topCareer = matchCareers(profile)[0];
+    if (topCareer) {
+      setJobSearch(topCareer.career.title);
+      setJobLocation(topCareer.career.environments?.[0] || defaultLocation);
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    const runJobsSearch = async () => {
+      if (!jobSearch.trim()) {
+        setJobs([]);
+        setJobsError('');
+        return;
+      }
+
+      setJobsLoading(true);
+      setJobsError('');
+
+      try {
+        const params = new URLSearchParams({
+          what: jobSearch.trim(),
+          where: jobLocation.trim() || defaultLocation,
+          results_per_page: '5',
+          page: '1',
+        });
+
+        const response = await fetch(`/api/jobs?${params.toString()}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data?.error || 'Unable to load jobs right now.');
+        }
+
+        setJobs(data.results || []);
+      } catch (error) {
+        console.error(error);
+        setJobsError(error.message || 'Could not fetch jobs.');
+        setJobs([]);
+      } finally {
+        setJobsLoading(false);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      runJobsSearch();
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [jobSearch, jobLocation]);
 
   if (!isLoaded) {
     return (
@@ -56,7 +115,6 @@ export default function RecommendationsPage() {
 
   return (
     <div className="page" id="recommendations-page">
-      {/* Hero Banner */}
       <div className="recs-banner">
         <div className="recs-banner-inner">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-md)' }}>
@@ -72,7 +130,6 @@ export default function RecommendationsPage() {
               </p>
             </div>
 
-            {/* Quick Action Buttons */}
             <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center', marginTop: 'var(--space-xs)' }}>
               <Link href="/discover" className="btn btn-secondary btn-sm" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', borderColor: 'rgba(255,255,255,0.25)' }}>
                 ✎ Edit answers
@@ -89,8 +146,7 @@ export default function RecommendationsPage() {
       </div>
 
       <div className="container" style={{ paddingTop: 0 }}>
-        {/* Controls: Filters & Sort */}
-        <div className="recs-controls">
+        <div className="recs-controls" style={{ marginBottom: 'var(--space-xl)' }}>
           <div className="filter-pills">
             <button
               className={`filter-pill ${activeFilter === 'all' ? 'active' : ''}`}
@@ -113,7 +169,6 @@ export default function RecommendationsPage() {
             })}
           </div>
 
-          {/* Sort dropdown */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)' }}>
             <span style={{ fontSize: '0.825rem', color: 'var(--color-warm-gray)' }}>Sort by:</span>
             <select
@@ -130,7 +185,73 @@ export default function RecommendationsPage() {
           </div>
         </div>
 
-        {/* Recommendations List */}
+        <div className="card" style={{ marginBottom: 'var(--space-2xl)', padding: 'var(--space-lg)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-md)', marginBottom: 'var(--space-md)' }}>
+            <div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--color-forest)', letterSpacing: '0.08em' }}>
+                Live Job Search
+              </div>
+              <h3 style={{ fontSize: '1.3rem', margin: '0.3rem 0 0' }}>Explore real openings</h3>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 'var(--space-md)' }}>
+            <input
+              className="form-input"
+              value={jobSearch}
+              onChange={(e) => setJobSearch(e.target.value)}
+              placeholder="Job title or keyword"
+            />
+            <input
+              className="form-input"
+              value={jobLocation}
+              onChange={(e) => setJobLocation(e.target.value)}
+              placeholder="Location"
+            />
+          </div>
+
+          {jobsError && (
+            <div style={{ marginTop: 'var(--space-md)', color: '#b42318', fontSize: '0.9rem' }}>
+              {jobsError}
+            </div>
+          )}
+
+          {jobsLoading ? (
+            <div style={{ marginTop: 'var(--space-lg)', color: 'var(--color-warm-gray)' }}>Loading jobs...</div>
+          ) : jobs.length > 0 ? (
+            <div style={{ marginTop: 'var(--space-lg)', display: 'grid', gap: 'var(--space-md)' }}>
+              {jobs.map((job) => (
+                <div key={job.id} className="card" style={{ padding: 'var(--space-md)', background: 'var(--color-cream-dark)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--color-warm-gray)', marginBottom: '0.2rem' }}>{job.company}</div>
+                      <h4 style={{ fontSize: '1.1rem', margin: '0 0 0.25rem' }}>{job.title}</h4>
+                      <div style={{ color: 'var(--color-warm-gray)', fontSize: '0.85rem' }}>{job.location}</div>
+                    </div>
+                    <a href={job.url} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm">
+                      View posting
+                    </a>
+                  </div>
+
+                  <div style={{ marginTop: 'var(--space-sm)', color: 'var(--color-warm-gray)', fontSize: '0.8rem' }}>
+                    {job.contractType ? `${job.contractType} • ` : ''}
+                    {job.category || 'General role'}
+                    {job.salaryMin || job.salaryMax ? ` • $${job.salaryMin ? Math.round(job.salaryMin / 1000) + 'k' : ''}${job.salaryMin && job.salaryMax ? '–' : ''}${job.salaryMax ? Math.round(job.salaryMax / 1000) + 'k' : ''}` : ''}
+                  </div>
+
+                  <p style={{ marginTop: 'var(--space-sm)', color: 'var(--color-near-black)', lineHeight: 1.6, fontSize: '0.9rem' }}>
+                    {job.description?.replace(/<[^>]+>/g, '').slice(0, 220)}{job.description?.length > 220 ? '…' : ''}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : !jobsLoading && jobSearch.trim() ? (
+            <div style={{ marginTop: 'var(--space-lg)', color: 'var(--color-warm-gray)' }}>
+              No jobs found for this search yet.
+            </div>
+          ) : null}
+        </div>
+
         <div id="recs-list">
           {filtered.length > 0 ? (
             filtered.map((match) => {
@@ -139,7 +260,6 @@ export default function RecommendationsPage() {
 
               return (
                 <div key={c.id} className="rec-card" data-career-id={c.id}>
-                  {/* Card Header */}
                   <div className="rec-card-header">
                     <div>
                       <span className="rec-field-chip" style={{ background: c.fieldColor || '#1E4030' }}>
@@ -150,7 +270,6 @@ export default function RecommendationsPage() {
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
-                      {/* Bookmark button */}
                       <button
                         className="btn btn-ghost btn-sm bookmark-btn"
                         onClick={() => toggleBookmark(c.id)}
@@ -159,7 +278,6 @@ export default function RecommendationsPage() {
                         {isBookmarked ? '★ Saved' : '☆ Save'}
                       </button>
 
-                      {/* Score Meter */}
                       <div className="rec-score-meter" title="Overall compatibility score">
                         <span className="rec-score-num">{match.score}%</span>
                         <span className="rec-score-label">Fit Score</span>
@@ -167,12 +285,10 @@ export default function RecommendationsPage() {
                     </div>
                   </div>
 
-                  {/* Description */}
                   <p style={{ fontSize: '0.925rem', color: 'var(--color-warm-gray)', lineHeight: 1.6, marginBottom: 'var(--space-md)' }}>
                     {c.description}
                   </p>
 
-                  {/* 4-Pillar Compatibility Breakdown */}
                   <div className="four-pillars">
                     <div className="pillar-item">
                       <div className="pillar-label">
@@ -215,9 +331,7 @@ export default function RecommendationsPage() {
                     </div>
                   </div>
 
-                  {/* Dual Fit Analysis Grid (Why it fits & Tradeoffs) */}
                   <div className="fit-analysis-grid">
-                    {/* Why It Fits */}
                     <div className="fit-box">
                       <div className="fit-box-title">
                         <span>✓</span>
@@ -228,7 +342,6 @@ export default function RecommendationsPage() {
                       </ul>
                     </div>
 
-                    {/* Tradeoffs / Why It May Not Fit */}
                     <div className="tradeoff-box">
                       <div className="tradeoff-box-title">
                         <span>⚡</span>
@@ -240,7 +353,6 @@ export default function RecommendationsPage() {
                     </div>
                   </div>
 
-                  {/* Stats Row & Deep Dive Link */}
                   <div className="rec-stats-row">
                     <div className="rec-stat-items">
                       <div className="rec-stat-item">
@@ -275,7 +387,6 @@ export default function RecommendationsPage() {
           )}
         </div>
 
-        {/* Bottom Explore / Compare Teaser */}
         <div style={{ background: 'var(--color-cream-dark)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-xl)', padding: 'var(--space-xl)', marginTop: 'var(--space-2xl)', textAlign: 'center' }}>
           <h3 className="font-display" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-xs)' }}>Want to compare careers side-by-side?</h3>
           <p style={{ color: 'var(--color-warm-gray)', fontSize: '0.95rem', marginBottom: 'var(--space-lg)', maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>

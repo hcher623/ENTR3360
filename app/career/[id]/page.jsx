@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getCareerById, CAREERS } from '../../../data/careers.js';
@@ -12,6 +12,52 @@ export default function CareerDetailPage() {
   const careerId = params?.id;
   const career = getCareerById(careerId);
   const { profile, bookmarks, toggleBookmark } = useProfile();
+  const [jobSearch, setJobSearch] = useState('');
+  const [jobLocation, setJobLocation] = useState('Remote');
+  const [jobs, setJobs] = useState([]);
+  const [jobsLoading, setJobsLoading] = useState(false);
+  const [jobsError, setJobsError] = useState('');
+
+  useEffect(() => {
+    if (!career) return;
+    setJobSearch(career.title);
+    setJobLocation(career.environments?.[0] || 'Remote');
+  }, [career]);
+
+  useEffect(() => {
+    if (!career || !jobSearch.trim()) return;
+
+    const fetchJobs = async () => {
+      setJobsLoading(true);
+      setJobsError('');
+
+      try {
+        const params = new URLSearchParams({
+          what: jobSearch.trim(),
+          where: jobLocation.trim() || 'Remote',
+          results_per_page: '5',
+          page: '1',
+        });
+
+        const response = await fetch(`/api/jobs?${params.toString()}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data?.error || 'Unable to load jobs right now.');
+        }
+
+        setJobs(data.results || []);
+      } catch (error) {
+        console.error(error);
+        setJobsError(error.message || 'Could not fetch jobs.');
+        setJobs([]);
+      } finally {
+        setJobsLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, [career, jobSearch, jobLocation]);
 
   if (!career) {
     return (
@@ -29,7 +75,6 @@ export default function CareerDetailPage() {
 
   return (
     <div className="page container" id="career-detail-page">
-      {/* Back nav and bookmark */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
         <Link href="/recommendations" className="btn btn-ghost btn-sm" style={{ marginLeft: '-var(--space-xs)' }}>
           ← Back to Recommendations
@@ -42,7 +87,6 @@ export default function CareerDetailPage() {
         </button>
       </div>
 
-      {/* Hero Visual */}
       <div className="career-hero">
         <img src={career.imageUrl} alt={`${career.title} environment`} className="career-hero-img" loading="lazy" />
         <div className="career-hero-overlay">
@@ -56,11 +100,8 @@ export default function CareerDetailPage() {
         </div>
       </div>
 
-      {/* Detail Grid Layout */}
       <div className="career-detail-grid">
-        {/* Main Column */}
         <div>
-          {/* Personalized Fit Panel (if user has profile) */}
           {matchResult ? (
             <div className="card" style={{ marginBottom: 'var(--space-2xl)', borderColor: 'var(--color-forest)', background: 'var(--color-white)', boxShadow: 'var(--shadow-md)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)', flexWrap: 'wrap', gap: 'var(--space-sm)' }}>
@@ -77,7 +118,6 @@ export default function CareerDetailPage() {
                 </div>
               </div>
 
-              {/* 4 Pillars Meter */}
               <div className="four-pillars" style={{ marginTop: 0 }}>
                 <div className="pillar-item">
                   <div className="pillar-label">
@@ -117,7 +157,6 @@ export default function CareerDetailPage() {
                 </div>
               </div>
 
-              {/* Dual Why It Fits & Tradeoffs */}
               <div className="fit-analysis-grid">
                 <div className="fit-box">
                   <div className="fit-box-title">
@@ -148,7 +187,6 @@ export default function CareerDetailPage() {
             </div>
           )}
 
-          {/* Overview & Day in the Life */}
           <div className="detail-section">
             <h2 className="detail-section-title">
               <span>📖</span>
@@ -156,7 +194,6 @@ export default function CareerDetailPage() {
             </h2>
             <div className="card" style={{ lineHeight: 1.7, color: 'var(--color-near-black)', fontSize: '1rem', marginBottom: 'var(--space-lg)' }}>
               <p style={{ marginBottom: 'var(--space-md)' }}>{career.description}</p>
-              
               <h4 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.35rem', color: 'var(--color-forest)' }}>
                 ☀️ A Day in the Life
               </h4>
@@ -166,7 +203,59 @@ export default function CareerDetailPage() {
             </div>
           </div>
 
-          {/* Skills Gap Visualizer */}
+          <div className="detail-section">
+            <h2 className="detail-section-title">
+              <span>🔎</span>
+              <span>Live Job Openings</span>
+            </h2>
+            <div className="card" style={{ marginBottom: 'var(--space-lg)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
+                <input
+                  className="form-input"
+                  value={jobSearch}
+                  onChange={(e) => setJobSearch(e.target.value)}
+                  placeholder="Search jobs for this role"
+                />
+                <input
+                  className="form-input"
+                  value={jobLocation}
+                  onChange={(e) => setJobLocation(e.target.value)}
+                  placeholder="Location"
+                />
+              </div>
+
+              {jobsError && (
+                <div style={{ color: '#b42318', marginBottom: 'var(--space-md)' }}>{jobsError}</div>
+              )}
+
+              {jobsLoading ? (
+                <div style={{ color: 'var(--color-warm-gray)' }}>Searching job listings...</div>
+              ) : jobs.length > 0 ? (
+                <div style={{ display: 'grid', gap: 'var(--space-md)' }}>
+                  {jobs.map((job) => (
+                    <div key={job.id} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-md)', background: 'var(--color-cream-dark)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
+                        <div>
+                          <div style={{ color: 'var(--color-warm-gray)', fontSize: '0.75rem' }}>{job.company}</div>
+                          <h4 style={{ fontSize: '1.05rem', margin: '0.25rem 0' }}>{job.title}</h4>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--color-warm-gray)' }}>{job.location}</div>
+                        </div>
+                        <a href={job.url} target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm">
+                          Apply
+                        </a>
+                      </div>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--color-near-black)', lineHeight: 1.6, marginTop: 'var(--space-sm)' }}>
+                        {job.description?.replace(/<[^>]+>/g, '').slice(0, 220)}{job.description?.length > 220 ? '…' : ''}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ color: 'var(--color-warm-gray)' }}>No live jobs found for this search.</div>
+              )}
+            </div>
+          </div>
+
           <div className="detail-section">
             <h2 className="detail-section-title">
               <span>⚡</span>
@@ -197,7 +286,6 @@ export default function CareerDetailPage() {
             </div>
           </div>
 
-          {/* Pros and Cons */}
           <div className="detail-section">
             <h2 className="detail-section-title">
               <span>⚖️</span>
@@ -226,7 +314,6 @@ export default function CareerDetailPage() {
             </div>
           </div>
 
-          {/* Education & Entry Pathways */}
           <div className="detail-section">
             <h2 className="detail-section-title">
               <span>🚀</span>
@@ -246,9 +333,7 @@ export default function CareerDetailPage() {
           </div>
         </div>
 
-        {/* Sidebar Column */}
         <div>
-          {/* Quick Facts Card */}
           <div className="card" style={{ marginBottom: 'var(--space-lg)', position: 'sticky', top: 'calc(var(--nav-h) + var(--space-lg))' }}>
             <h3 style={{ fontSize: '1.15rem', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
               Quick Facts
@@ -277,7 +362,6 @@ export default function CareerDetailPage() {
               </div>
             </div>
 
-            {/* Related Careers in Sector */}
             {relatedCareers.length > 0 && (
               <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-md)', marginTop: 'var(--space-md)' }}>
                 <span style={{ color: 'var(--color-warm-gray)', display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: 'var(--space-xs)' }}>
