@@ -200,7 +200,7 @@ export function AuthProvider({ children }) {
       return await signIn(cleanEmail, cleanPassword);
     } catch (err) {
       console.warn('API registration error, trying client fallback:', err);
-      // If error is the headers code point error or network issue, fallback gracefully
+      // If the API route is unreachable, use a local prototype account.
       const fallbackUser = {
         id: 'usr_' + Date.now(),
         email: cleanEmail,
@@ -212,45 +212,48 @@ export function AuthProvider({ children }) {
       } catch (_) {}
       return { success: true, user: fallbackUser };
     }
+  };
 
-    // Fallback if API route is unreachable
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email: cleanEmail,
-          password,
-          options: { data: { name: displayName } }
-        });
-        if (error) {
-          setAuthError(error.message);
-          return { error: error.message };
-        }
-        if (data?.user) {
-          const u = {
-            id: data.user.id,
-            email: data.user.email,
-            name: displayName,
-          };
-          setUser(u);
-          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(u));
-          return { success: true, user: u };
-        }
-      } catch (err) {
-        setAuthError(err.message);
-        return { error: err.message };
-      }
+  // Send a password recovery email through Supabase.
+  const requestPasswordReset = async (email) => {
+    setAuthError(null);
+    const cleanEmail = String(email || '').trim().toLowerCase();
+
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      return { error: 'Please enter a valid email address.' };
     }
 
-    const newUser = {
-      id: 'usr_' + Date.now(),
-      email: cleanEmail,
-      name: displayName,
-    };
-    setUser(newUser);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: 'Password recovery is not available right now.' };
+    }
+
     try {
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(newUser));
-    } catch (_) {}
-    return { success: true, user: newUser };
+      const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+      if (error) return { error: error.message };
+
+      // Keep this response generic so the UI does not disclose whether an account exists.
+      return { success: true };
+    } catch (err) {
+      return { error: err.message || 'Unable to send a password reset email.' };
+    }
+  };
+
+  // Update password while the user has a valid recovery session.
+  const updatePassword = async (newPassword) => {
+    setAuthError(null);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: 'Password recovery is not available right now.' };
+    }
+
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) return { error: error.message };
+      return { success: true };
+    } catch (err) {
+      return { error: err.message || 'Unable to update your password.' };
+    }
   };
 
   // One-click sign in for the reviewer/grader
@@ -288,6 +291,8 @@ export function AuthProvider({ children }) {
         signIn,
         signUp,
         signInWithTestAccount,
+        requestPasswordReset,
+        updatePassword,
         signOut,
         isSupabaseConfigured,
         testAccount: TEST_ACCOUNT
