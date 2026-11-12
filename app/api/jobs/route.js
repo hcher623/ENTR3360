@@ -32,7 +32,7 @@ export async function GET(request) {
 
   const appId = process.env.ADZUNA_APP_ID;
   const apiKey = process.env.ADZUNA_API_KEY;
-  const country = (process.env.ADZUNA_COUNTRY || 'us').trim().toLowerCase();
+  const country = (process.env.ADZUNA_COUNTRY || 'ca').trim().toLowerCase();
 
   if (!appId || !apiKey) {
     return NextResponse.json(
@@ -43,7 +43,7 @@ export async function GET(request) {
 
   if (!/^[a-z]{2}$/.test(country)) {
     return NextResponse.json(
-      { error: 'ADZUNA_COUNTRY must be a two-letter country code, such as us or gb.' },
+      { error: 'ADZUNA_COUNTRY must be a two-letter country code, such as ca or gb.' },
       { status: 500 }
     );
   }
