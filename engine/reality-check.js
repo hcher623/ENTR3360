@@ -1,74 +1,80 @@
-// Reality Check is an advisory layer over the deterministic CareerCompass matcher.
-// It does not alter compatibility scores or ranking.
+// Reality Check is a deterministic advisory layer; it never changes match scores or ranking.
+
+function environmentFits(preferred, typicalEnvironments) {
+  if (!preferred || preferred === 'No preference') return true;
+  if (preferred === 'Remote' || preferred === 'Hybrid') {
+    return typicalEnvironments.includes(preferred);
+  }
+  if (preferred === 'In-person') {
+    return typicalEnvironments.some(environment => !['Remote', 'Hybrid'].includes(environment));
+  }
+  return typicalEnvironments.includes(preferred);
+}
 
 export function getRealityCheck(matchResult, profile) {
   if (!matchResult?.career || !profile) return null;
 
   const career = matchResult.career;
-  const careerSkills = Array.isArray(career.requiredSkills) ? career.requiredSkills : [];
+  const requiredSkills = Array.isArray(career.requiredSkills) ? career.requiredSkills : [];
   const profileSkills = Array.isArray(profile.skills) ? profile.skills : [];
-  const missingSkills = careerSkills.filter(skill => !profileSkills.includes(skill));
-  const matchedSkills = careerSkills.filter(skill => profileSkills.includes(skill));
-
-  const environmentMismatch = Boolean(
-    profile.environment
-    && profile.environment !== 'No preference'
-    && Array.isArray(career.environments)
-    && !career.environments.includes(profile.environment)
-  );
-
+  const missingSkills = requiredSkills.filter(skill => !profileSkills.includes(skill));
+  const matchedSkills = requiredSkills.filter(skill => profileSkills.includes(skill));
+  const typicalEnvironments = Array.isArray(career.environments) ? career.environments : [];
+  const preferredEnvironment = profile.environment || 'No preference';
+  const environmentMismatch = !environmentFits(preferredEnvironment, typicalEnvironments);
   const warnings = [];
   const nextSteps = [];
 
-  if (missingSkills.length > 0) {
+  if (missingSkills.length) {
     warnings.push({
       type: 'skills',
-      title: 'Skills to develop',
-      detail: `Build strength in ${missingSkills.slice(0, 4).join(', ')}${missingSkills.length > 4 ? ` and ${missingSkills.length - 4} more` : ''}.`
+      title: 'Skills to build',
+      detail: `Your profile does not yet list ${missingSkills.slice(0, 4).join(', ')}${missingSkills.length > 4 ? ` and ${missingSkills.length - 4} more` : ''}. These are development areas, not a measure of your potential.`
     });
-    nextSteps.push(`Start with ${missingSkills[0]}: find one beginner course or small portfolio exercise that demonstrates it.`);
+    nextSteps.push(`Pick one skill to practice first${missingSkills.length > 1 ? `—start with ${missingSkills[0]}` : ''}—through a short course, project, or volunteer assignment.`);
   }
 
   if (career.education) {
     warnings.push({
       type: 'education',
-      title: 'Education & credentials',
+      title: 'Education & entry path',
       detail: career.education
     });
-    nextSteps.push(`Use the education baseline above to map whether you need a degree, certificate, portfolio, internship, or licensure.`);
+    nextSteps.push('Compare this pathway with your current education and experience; your profile does not include those details, so this is a point to verify, not a claimed gap.');
   }
 
   if (environmentMismatch) {
     warnings.push({
       type: 'environment',
       title: 'Work-setting mismatch',
-      detail: `Your preferred setting is ${profile.environment}, while this career is typically found in ${career.environments.join(', ')}.`
+      detail: `You prefer ${preferredEnvironment}; listed settings for this career are ${typicalEnvironments.length ? typicalEnvironments.join(', ') : 'not specified'}.`
     });
-    nextSteps.push(`Look specifically for ${profile.environment.toLowerCase()} openings or ask employers whether this role can be adapted to that setting.`);
+    nextSteps.push(`Check current postings for ${preferredEnvironment.toLowerCase()} options and ask employers how often this role requires another setting.`);
   }
 
-  if (Array.isArray(career.cons) && career.cons.length > 0) {
+  const tradeoffs = Array.isArray(career.cons) ? career.cons : [];
+  if (tradeoffs.length) {
     warnings.push({
       type: 'tradeoff',
-      title: 'Realistic trade-off',
-      detail: career.cons.join(' ')
+      title: 'Trade-offs to weigh',
+      detail: tradeoffs.slice(0, 2).join(' ')
     });
+    nextSteps.push(`Think through whether ${tradeoffs[0].charAt(0).toLowerCase()}${tradeoffs[0].slice(1)} is a trade-off you could accept day to day.`);
   }
 
-  if (nextSteps.length === 0) {
-    nextSteps.push('Talk with someone working in this field and review three real job postings to verify your readiness.');
+  if (!nextSteps.length) {
+    nextSteps.push('Review a few current job postings and speak with someone in the field to validate your readiness and expectations.');
   } else {
-    nextSteps.push('Review three real job postings and compare their requirements with this readiness assessment.');
+    nextSteps.push('Review three current job postings to compare real requirements with this overview.');
   }
 
-  const readinessScore = careerSkills.length === 0
-    ? matchResult.score
-    : Math.round(((matchedSkills.length / careerSkills.length) * 70) + (matchResult.score * 0.30));
-
+  const readinessScore = requiredSkills.length
+    ? Math.round((matchedSkills.length / requiredSkills.length) * 70 + (matchResult.score * 0.30))
+    : matchResult.score;
   let readinessLabel = 'Explore further';
   if (readinessScore >= 80) readinessLabel = 'Strong starting position';
   else if (readinessScore >= 65) readinessLabel = 'Promising with preparation';
-  else if (readinessScore >= 50) readinessLabel = 'Needs focused preparation';
+  else if (readinessScore >= 50) readinessLabel = 'Build a preparation plan';
 
   return {
     careerId: career.id,
@@ -78,18 +84,10 @@ export function getRealityCheck(matchResult, profile) {
     matchedSkills,
     missingSkills,
     environmentMismatch,
-    preferredEnvironment: profile.environment || 'No preference',
-    typicalEnvironments: Array.isArray(career.environments) ? career.environments : [],
+    preferredEnvironment,
+    typicalEnvironments,
     education: career.education || '',
     warnings,
     nextSteps: nextSteps.slice(0, 4)
   };
-}
-
-export function getRealityChecks(profile) {
-  if (!profile) return [];
-
-  // Importing in the matching module would create a circular dependency, so callers
-  // provide match results and the top result is handled by getRealityCheck.
-  return [];
 }
