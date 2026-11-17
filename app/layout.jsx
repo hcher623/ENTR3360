@@ -1,4 +1,5 @@
 import '../styles.css';
+import '../profile-polish.css';
 import { ProfileProvider } from './context/ProfileContext';
 import { AuthProvider } from './context/AuthContext';
 import SessionWrapper from './components/SessionWrapper';

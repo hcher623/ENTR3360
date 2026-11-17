@@ -1,0 +1,154 @@
+/* Profile review polish: keep selected capabilities and interests legible as separate chips. */
+.summary-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.summary-tag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+/* Give wizard navigation and step content consistent rhythm. */
+.discover-page .container-narrow {
+  padding-top: var(--space-xl);
+}
+
+.wizard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.wizard-steps-nav {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.wizard-step-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  min-height: 2.5rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-warm-gray);
+  background: var(--color-white);
+  font-size: 0.85rem;
+  line-height: 1.2;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.wizard-step-tab.active,
+.wizard-step-tab.completed {
+  color: var(--color-forest);
+  border-color: var(--color-forest);
+  background: var(--color-forest-tint);
+}
+
+.step-badge-indicator {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  color: var(--color-forest);
+  background: var(--color-forest-tint);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.step-title {
+  margin-bottom: var(--space-xs);
+  line-height: 1.15;
+}
+
+.step-desc {
+  max-width: 68ch;
+  color: var(--color-warm-gray);
+  line-height: 1.65;
+}
+
+#step-body {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+#step-body > h3 {
+  margin-bottom: var(--space-md);
+}
+
+.slider-header {
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-sm);
+}
+
+.slider-hint {
+  text-align: right;
+}
+
+.slider-poles {
+  align-items: flex-start;
+}
+
+.slider-pole-left,
+.slider-pole-right {
+  overflow-wrap: anywhere;
+}
+
+.summary-card-header {
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-sm);
+}
+
+.summary-card-title {
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.btn-edit-section {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .wizard-header {
+    align-items: flex-start;
+  }
+
+  .wizard-steps-nav {
+    gap: var(--space-2xs);
+  }
+
+  .wizard-step-tab {
+    padding-inline: 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .slider-hint {
+    text-align: left;
+  }
+
+  .slider-poles {
+    gap: var(--space-sm);
+    font-size: 0.78rem;
+  }
+
+  .summary-card-header {
+    align-items: flex-start;
+  }
+}
